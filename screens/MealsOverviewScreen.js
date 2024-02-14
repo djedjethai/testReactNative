@@ -1,6 +1,7 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, FlatList, StyleSheet, TouchableOpacity } from 'react-native'
 // import { useNavigation, useRoute } from '@react-navigation/native'
 
+import MealItem from '../components/MealItem'
 import { MEALS } from '../data/dummy-data'
 
 function MealsOverviewScreen({navigation, route}) { // got navigation as this screen is a Stack.screen
@@ -8,6 +9,24 @@ function MealsOverviewScreen({navigation, route}) { // got navigation as this sc
 	// const route = useRoute()
 	
 	const catId = route.params.categoryId
+	const displayedMeals = MEALS.filter((mealItem) => {
+		return mealItem.categoryIds.indexOf(catId) >= 0
+	})
+
+	function renderMealItem(itemData){
+		const item = itemData.item
+		const mealItemProps = {
+			title:item.title,
+			imageUrl:item.imageUrl,
+			duration:item.duration,
+			complexity:item.complexity,
+			affordability:item.affordability
+		
+		}
+		return (
+			<MealItem {...mealItemProps}/>
+		)
+	}
 	
 	navigateToAnotherPage = () => {
 		navigation.navigate('MealsTest')
@@ -15,12 +34,16 @@ function MealsOverviewScreen({navigation, route}) { // got navigation as this sc
 
 	return (
 		<View style={styles.container}>
-			<Text>MEALS overviews - {catId}</Text>
+			<FlatList 
+				data={displayedMeals}
+				keyExtractor={(item) => item.id}
+				renderItem={renderMealItem}
+				
+			/>
 			<TouchableOpacity 
 				onPress={navigateToAnotherPage} 
 				style={styles.button}
 			>
-        			<Text style={styles.buttonText}>Go to Another Page</Text>
       			</TouchableOpacity>
 		</View>
 	)
