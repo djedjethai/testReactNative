@@ -1,8 +1,9 @@
+import { useLayoutEffect } from 'react'
 import { View, FlatList, StyleSheet, TouchableOpacity } from 'react-native'
 // import { useNavigation, useRoute } from '@react-navigation/native'
 
 import MealItem from '../components/MealItem'
-import { MEALS } from '../data/dummy-data'
+import { MEALS, CATEGORIES } from '../data/dummy-data'
 
 function MealsOverviewScreen({navigation, route}) { // got navigation as this screen is a Stack.screen
 	// const navigation = useNavigation() // if nested cpn without navigation access
@@ -13,18 +14,43 @@ function MealsOverviewScreen({navigation, route}) { // got navigation as this sc
 		return mealItem.categoryIds.indexOf(catId) >= 0
 	})
 
+	// set the title on the top of the page
+	useLayoutEffect(() => {
+		const categoryTitle = CATEGORIES.find(
+			(category) => category.id === catId
+		).title
+
+		navigation.setOptions({
+			title: categoryTitle
+		})
+
+	}, [catId, navigation])
+
+
 	function renderMealItem(itemData){
 		const item = itemData.item
+
+		// that works but we rediract from MealItem.js for the example
+		// function pressHandler(){
+		// 	navigation.navigate('MealDetails', {
+		// 		mealId: item.id
+		// 	})
+		// }
+
 		const mealItemProps = {
+			id: item.id,
 			title:item.title,
 			imageUrl:item.imageUrl,
 			duration:item.duration,
 			complexity:item.complexity,
-			affordability:item.affordability
-		
+			affordability:item.affordability,	
 		}
+
 		return (
-			<MealItem {...mealItemProps}/>
+			<MealItem 
+				{...mealItemProps} 
+				// onPress={pressHandler} 
+			/>
 		)
 	}
 	
