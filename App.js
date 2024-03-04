@@ -4,12 +4,15 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Ionicons } from '@expo/vector-icons'
+import { Provider } from 'react-redux'
 
 import CategoriesScreen from './screens/CategoriesScreen'
 import MealsOverviewScreen from './screens/MealsOverviewScreen'
 import MealDetailsScreen from './screens/MealDetailsScreen'
 import MealsOverviewTest from './screens/mealsOverview/MealsOverviewTest'
 import FavoritesScreen from './screens/FavoritesScreen'
+import { store } from './store/redux/store'
+
 
 const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator();
@@ -68,6 +71,7 @@ export default function App() {
   return (
 	  <>
 	  <StatusBar style='light'/>
+	  <Provider store={store}>
 	  <NavigationContainer> 
 	  	<Stack.Navigator 
 	  		screenOptions={{
@@ -106,6 +110,7 @@ export default function App() {
 	  		/>
 	  	</Stack.Navigator>
 	  </NavigationContainer>
+	  </Provider>
 	  </>
   );
 }
